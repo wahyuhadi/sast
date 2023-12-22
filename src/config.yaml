@@ -1,0 +1,5 @@
+lang: php
+rules: http://127.0.0.1:8181/p/all
+scan_type: repo
+projects:
+  - https://github.com/phpindonesia/phpindonesia
