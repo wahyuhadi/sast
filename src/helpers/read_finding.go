@@ -45,6 +45,7 @@ func ExtractResult(conf models.Optional) {
 	} else {
 		for _, i := range payload.Results {
 			var finding models.Finding
+			finding.Lang = conf.Lang
 			finding.Branch = conf.Branch
 			finding.IsFinding = true
 			finding.ScanAt = time

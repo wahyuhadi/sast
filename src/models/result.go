@@ -57,6 +57,7 @@ type Finding struct {
 	Message         string  `json:"message"`
 	Category        string  `json:"category"`
 	Confidence      string  `json:"confidence"`
+	Lang            string  `json:"lang"`
 	Technology      *string `json:"technology"`
 	UniqueID        string  `json:"unique_id"`
 	Severity        string  `json:"severity"`
