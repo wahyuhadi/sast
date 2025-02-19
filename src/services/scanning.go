@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	URIRule = "https://xsec.thefalcons.site/sast/"
+	URIRule = "https://xsec.uthis.site/sast/"
 )
 
 func scanning(path string, conf models.Optional) {
