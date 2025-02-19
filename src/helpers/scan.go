@@ -32,7 +32,7 @@ func Scan(config models.Optional) {
 	_, err := git.PlainClone(repos, false, &git.CloneOptions{
 		URL: projects_repo,
 		Auth: &http.BasicAuth{
-			Username: "",
+			Username: "oauth2",
 			Password: repo.Token,
 		},
 		ReferenceName: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", config.Branch)),
