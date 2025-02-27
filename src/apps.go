@@ -19,7 +19,7 @@ var (
 	key    = flag.String("key", "", "unique key")
 
 	repo    = flag.String("repo", "", "mode to scaning ")
-	private = flag.Bool("private", true, "is private repo ")
+	private = flag.String("private", "true", "is private repo ")
 	gituser = flag.String("guser", "", "git user ")
 	gpass   = flag.String("gpass", "", "git token ")
 
@@ -29,10 +29,16 @@ var (
 
 func parse_opt() *models.Optional {
 	flag.Parse()
+	is_priv := true
+	if *private == "true" {
+		is_priv = true
+	} else {
+		is_priv = false
+	}
 	return &models.Optional{
 		Branch:    *branch,
 		Key:       *key,
-		Private:   *private,
+		Private:   is_priv,
 		Rules:     *rules,
 		Username:  *gituser,
 		Password:  *gpass,
