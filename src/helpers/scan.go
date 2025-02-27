@@ -24,29 +24,51 @@ func Scan(config models.Optional) {
 	// if keyError != nil {
 	// 	fmt.Println(keyError)
 	// }
-	repo, _ := extractTokenAndURL(config.RepoURI)
-	projects_repo := repo.URL
-	repos := projects_repo[strings.LastIndex(projects_repo, "/")+1:]
-	repos = fmt.Sprintf("/tmp/%s", repos)
-	log.Println(fmt.Sprintf("[+] Clone repo %s to folder %s ", projects_repo, repos))
-	_, err := git.PlainClone(repos, false, &git.CloneOptions{
-		URL: projects_repo,
-		Auth: &http.BasicAuth{
-			Username: "oauth2",
-			Password: repo.Token,
-		},
-		ReferenceName: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", config.Branch)),
-	})
+	if config.Private {
+		repo, _ := extractTokenAndURL(config.RepoURI)
+		projects_repo := repo.URL
+		repos := projects_repo[strings.LastIndex(projects_repo, "/")+1:]
+		repos = fmt.Sprintf("/tmp/%s", repos)
+		log.Println(fmt.Sprintf("[+] Clone repo %s to folder %s ", projects_repo, repos))
+		_, err := git.PlainClone(repos, false, &git.CloneOptions{
+			URL: projects_repo,
+			Auth: &http.BasicAuth{
+				Username: "oauth2",
+				Password: repo.Token,
+			},
+			ReferenceName: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", config.Branch)),
+		})
 
-	if err != nil {
-		log.Println("[!] Error when clone repo ", projects_repo)
-		fmt.Println(err)
-		os.Exit(1)
+		if err != nil {
+			log.Println("[!] Error when clone repo ", projects_repo)
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		os.Chdir(repos)
+		services.Scanning_root_path(config)
+		ExtractResult(config)
+	} else {
+		projects_repo := config.RepoURI
+		repos := projects_repo[strings.LastIndex(projects_repo, "/")+1:]
+		repos = fmt.Sprintf("/tmp/%s", repos)
+		log.Println(fmt.Sprintf("[+] Clone repo %s to folder %s ", projects_repo, repos))
+		_, err := git.PlainClone(repos, false, &git.CloneOptions{
+			URL:           projects_repo,
+			ReferenceName: plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", config.Branch)),
+		})
+
+		if err != nil {
+			log.Println("[!] Error when clone repo ", projects_repo)
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		os.Chdir(repos)
+		services.Scanning_root_path(config)
+		ExtractResult(config)
 	}
 
-	os.Chdir(repos)
-	services.Scanning_root_path(config)
-	ExtractResult(config)
 }
 
 // Struct untuk menyimpan hasil token dan URL
