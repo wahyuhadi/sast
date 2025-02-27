@@ -54,7 +54,9 @@ func Scan(config models.Optional) {
 		repos = fmt.Sprintf("/tmp/%s", repos)
 		log.Println(fmt.Sprintf("[+] Clone repo %s to folder %s ", projects_repo, repos))
 		_, err := git.PlainClone(repos, false, &git.CloneOptions{
-			URL: config.RepoURI,
+			URL:               config.RepoURI,
+			RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+			ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", config.Branch)),
 		})
 
 		if err != nil {
