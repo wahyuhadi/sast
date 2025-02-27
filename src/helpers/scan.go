@@ -52,15 +52,9 @@ func Scan(config models.Optional) {
 		projects_repo := config.RepoURI
 		repos := projects_repo[strings.LastIndex(projects_repo, "/")+1:]
 		repos = fmt.Sprintf("/tmp/%s", repos)
-		log.Println(fmt.Sprintf("[+] Clone repo %s to folder %s ", projects_repo, repos, "this is public repos"))
+		log.Println(fmt.Sprintf("[+] Clone repo %s to folder %s %s", projects_repo, repos, "this is public repos"))
 		_, err := git.PlainClone(repos, false, &git.CloneOptions{
-			URL:               config.RepoURI,
-			RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
-			ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", config.Branch)),
-			Auth: &http.BasicAuth{
-				Username: "oauth2",
-				Password: "",
-			},
+			URL: config.RepoURI,
 		})
 
 		if err != nil {
