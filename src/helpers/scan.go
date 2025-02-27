@@ -57,6 +57,10 @@ func Scan(config models.Optional) {
 			URL:               config.RepoURI,
 			RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
 			ReferenceName:     plumbing.ReferenceName(fmt.Sprintf("refs/heads/%s", config.Branch)),
+			Auth: &http.BasicAuth{
+				Username: "oauth2",
+				Password: "",
+			},
 		})
 
 		if err != nil {
